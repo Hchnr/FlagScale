@@ -1,0 +1,12 @@
+diff --git a/tools/patch/patch.py b/tools/patch/patch.py
+index 8199762b..6789c900 100644
+--- a/tools/patch/patch.py
++++ b/tools/patch/patch.py
+@@ -343,6 +343,7 @@ def _generate_patch_file_for_backend(
+             logger.error(f"Failed to roll back: {cleanup_error}", exc_info=True)
+             raise cleanup_error
+ 
++    import pdb; pdb.set_trace()
+     return patch_dir, temp_patch_files_with_relpath, temp_yaml_path
+ 
+ 
