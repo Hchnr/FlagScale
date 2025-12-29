@@ -167145,10 +167145,10 @@ index 000000000..a3fcba092
 \ No newline at end of file
 diff --git a/vllm_musa/setup.py b/vllm_musa/setup.py
 new file mode 100644
-index 000000000..d9db28c59
+index 000000000..7aaec53fb
 --- /dev/null
 +++ b/vllm_musa/setup.py
-@@ -0,0 +1,187 @@
+@@ -0,0 +1,195 @@
 +#
 +# Copyright (c) 2025 MooreThreads Co., Ltd. All Rights Reserved.
 +# This file is a part of the vllm_musa project.
@@ -167243,18 +167243,26 @@ index 000000000..d9db28c59
 +    "-Wno-switch-bool",
 +]
 +mcc_flags = [
-+    "-Od3",
 +    "-O2",
 +    "-DNDEBUG",
 +    "-fno-strict-aliasing",
++    "-ffast-math",
 +    "-fmusa-flush-denormals-to-zero",
 +    "-std=c++17",
 +    "-mllvm",
-+    "-mtgpu-enable-max-ilp-scheduling-strategy=0",
-+    "-mllvm",
 +    "-mtgpu-enchanced-minreg-schedule=1",
 +    "-mllvm",
-+    "-mtgpu-enable-cse=0"
++    "-mtgpu-if-convert=1",
++    "-mllvm",
++    "-mtgpu-enable-postra-sched=0",
++    "-mllvm",
++    "-mtgpu-tiny-offset-hint=1",
++    "-mllvm",
++    "-mtgpu-combine-fop-instr=0",
++    "-mllvm",
++    "-mtgpu-combine-instr-with-burst=0",
++    "-mllvm",
++    "-mtgpu-alloc-shared-memory-from-zero=0",
 +]
 +kernel_sources = [
 +    "csrc/ops.mu",
