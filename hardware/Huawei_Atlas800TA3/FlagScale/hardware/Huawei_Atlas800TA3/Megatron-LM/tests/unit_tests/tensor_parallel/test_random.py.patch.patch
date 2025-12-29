@@ -1,0 +1,21 @@
+diff --git a/hardware/Huawei_Atlas800TA3/Megatron-LM/tests/unit_tests/tensor_parallel/test_random.py.patch b/hardware/Huawei_Atlas800TA3/Megatron-LM/tests/unit_tests/tensor_parallel/test_random.py.patch
+new file mode 100644
+index 00000000..0bcaae56
+--- /dev/null
++++ b/hardware/Huawei_Atlas800TA3/Megatron-LM/tests/unit_tests/tensor_parallel/test_random.py.patch
+@@ -0,0 +1,14 @@
++diff --git a/tests/unit_tests/tensor_parallel/test_random.py b/tests/unit_tests/tensor_parallel/test_random.py
++index 48273003c..47b607b87 100644
++--- a/tests/unit_tests/tensor_parallel/test_random.py
+++++ b/tests/unit_tests/tensor_parallel/test_random.py
++@@ -35,7 +35,7 @@ def test_cuda_rng_states_tracker():
++ 
++ def test_model_parallel_cuda_manual_seed():
++     Utils.initialize_model_parallel(4, 2)
++-    model_parallel_cuda_manual_seed(0)
+++    model_parallel_cuda_manual_seed(0, force_reset_rng=True)
++     rng_tracker = get_cuda_rng_tracker()
++     assert rng_tracker.get_states()['model-parallel-rng'] is not None
++     Utils.destroy_model_parallel()
++
+

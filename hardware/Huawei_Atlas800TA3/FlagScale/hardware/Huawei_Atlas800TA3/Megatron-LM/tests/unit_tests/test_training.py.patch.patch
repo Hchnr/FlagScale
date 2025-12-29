@@ -1,0 +1,20 @@
+diff --git a/hardware/Huawei_Atlas800TA3/Megatron-LM/tests/unit_tests/test_training.py.patch b/hardware/Huawei_Atlas800TA3/Megatron-LM/tests/unit_tests/test_training.py.patch
+new file mode 100644
+index 00000000..33d9b4d0
+--- /dev/null
++++ b/hardware/Huawei_Atlas800TA3/Megatron-LM/tests/unit_tests/test_training.py.patch
+@@ -0,0 +1,13 @@
++diff --git a/tests/unit_tests/test_training.py b/tests/unit_tests/test_training.py
++index 8dec6d45b..953a80e09 100644
++--- a/tests/unit_tests/test_training.py
+++++ b/tests/unit_tests/test_training.py
++@@ -25,6 +25,7 @@ def create_test_args():
++     args.skip_train = False
++     args.full_validation = False
++     args.multiple_validation_sets = False
+++    args.perform_rl_step = False
++ 
++     return args
++ 
++
+

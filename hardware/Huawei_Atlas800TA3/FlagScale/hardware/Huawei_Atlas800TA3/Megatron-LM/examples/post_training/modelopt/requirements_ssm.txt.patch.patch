@@ -1,0 +1,16 @@
+diff --git a/hardware/Huawei_Atlas800TA3/Megatron-LM/examples/post_training/modelopt/requirements_ssm.txt.patch b/hardware/Huawei_Atlas800TA3/Megatron-LM/examples/post_training/modelopt/requirements_ssm.txt.patch
+new file mode 100644
+index 00000000..1ef059fd
+--- /dev/null
++++ b/hardware/Huawei_Atlas800TA3/Megatron-LM/examples/post_training/modelopt/requirements_ssm.txt.patch
+@@ -0,0 +1,9 @@
++diff --git a/examples/post_training/modelopt/requirements_ssm.txt b/examples/post_training/modelopt/requirements_ssm.txt
++new file mode 100644
++index 000000000..b57ae4d41
++--- /dev/null
+++++ b/examples/post_training/modelopt/requirements_ssm.txt
++@@ -0,0 +1,2 @@
+++mamba-ssm>=2.2.5
+++causal-conv1d @ git+https://github.com/Dao-AILab/causal-conv1d
++
+

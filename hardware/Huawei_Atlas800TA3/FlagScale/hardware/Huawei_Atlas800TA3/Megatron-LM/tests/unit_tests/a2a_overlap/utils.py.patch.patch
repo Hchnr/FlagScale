@@ -1,0 +1,21 @@
+diff --git a/hardware/Huawei_Atlas800TA3/Megatron-LM/tests/unit_tests/a2a_overlap/utils.py.patch b/hardware/Huawei_Atlas800TA3/Megatron-LM/tests/unit_tests/a2a_overlap/utils.py.patch
+new file mode 100644
+index 00000000..f3eb9aa8
+--- /dev/null
++++ b/hardware/Huawei_Atlas800TA3/Megatron-LM/tests/unit_tests/a2a_overlap/utils.py.patch
+@@ -0,0 +1,14 @@
++diff --git a/tests/unit_tests/a2a_overlap/utils.py b/tests/unit_tests/a2a_overlap/utils.py
++index 195d74731..7db4256a8 100644
++--- a/tests/unit_tests/a2a_overlap/utils.py
+++++ b/tests/unit_tests/a2a_overlap/utils.py
++@@ -35,7 +35,7 @@ class DummyNode:
++     to transformer layers in a real model.
++     """
++ 
++-    common_state = DummyState()
+++    layer_state = DummyState()
++     chunk_state = DummyState()
++ 
++     def detach(self, x):
++
+

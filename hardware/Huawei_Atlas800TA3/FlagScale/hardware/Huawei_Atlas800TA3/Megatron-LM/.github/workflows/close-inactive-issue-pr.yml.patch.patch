@@ -1,0 +1,22 @@
+diff --git a/hardware/Huawei_Atlas800TA3/Megatron-LM/.github/workflows/close-inactive-issue-pr.yml.patch b/hardware/Huawei_Atlas800TA3/Megatron-LM/.github/workflows/close-inactive-issue-pr.yml.patch
+new file mode 100644
+index 00000000..729d7ff7
+--- /dev/null
++++ b/hardware/Huawei_Atlas800TA3/Megatron-LM/.github/workflows/close-inactive-issue-pr.yml.patch
+@@ -0,0 +1,15 @@
++diff --git a/.github/workflows/close-inactive-issue-pr.yml b/.github/workflows/close-inactive-issue-pr.yml
++new file mode 100644
++index 000000000..b81f82931
++--- /dev/null
+++++ b/.github/workflows/close-inactive-issue-pr.yml
++@@ -0,0 +1,8 @@
+++name: Stale-Close-Inactive-Issues-PRs
+++on:
+++  schedule:
+++    - cron: "30 1 * * *"
+++
+++jobs:
+++  close-issues:
+++    uses: NVIDIA-NeMo/FW-CI-templates/.github/workflows/_close_inactive_issue_pr.yml@v0.44.0
++
+

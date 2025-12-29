@@ -1,0 +1,19 @@
+diff --git a/hardware/Huawei_Atlas800TA3/Megatron-LM/docs/source/user-guide/index.rst.patch b/hardware/Huawei_Atlas800TA3/Megatron-LM/docs/source/user-guide/index.rst.patch
+new file mode 100644
+index 00000000..5fce36d7
+--- /dev/null
++++ b/hardware/Huawei_Atlas800TA3/Megatron-LM/docs/source/user-guide/index.rst.patch
+@@ -0,0 +1,12 @@
++diff --git a/docs/source/user-guide/index.rst b/docs/source/user-guide/index.rst
++index aab745736..a1edf4271 100644
++--- a/docs/source/user-guide/index.rst
+++++ b/docs/source/user-guide/index.rst
++@@ -2,4 +2,5 @@ User Guide
++ ============
++ 
++ .. mdinclude:: ../../../megatron/core/QuickStart.md
+++.. mdinclude:: ../../../megatron/core/Installation_Guide.md
++ .. mdinclude:: ../../../megatron/core/MSC_Integration.md
++\ No newline at end of file
++
+
