@@ -7,11 +7,11 @@ is_debug: false
 
 batch_size: 2
 resume: false
-checkpoint_dir: results/ckpt_in
+checkpoint_dir: ${experiment.exp_name}/checkpoints/ckpt_in
 exp_name: starvla
 project_name: starvla
 wandb_enabled: false
-output_directory: results/ckpt_out
+output_directory: ${experiment.exp_name}/checkpoints/ckpt_out
 log_freq: 10
 train_steps: 100
 
