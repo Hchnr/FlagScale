@@ -18,7 +18,7 @@ train_steps: 100
 framework:
   name: QwenGR00T
   qwenvl:
-    base_vlm: /repos/flagscale_new_robotics/FlagScale/results/ckpt_in/backbone
+    base_vlm: /nfs/hcr/models/Qwen/Qwen2.5-VL-3B-Instruct
     # attn_implementation: flash_attention_2
     attn_implementation: eager
     vl_hidden_dim: 2048
@@ -59,7 +59,7 @@ datasets:
     state_key: eepose
     action_horizon: 7
     action_key: eepose
-  data_path: /repos/flagscale_new_robotics/FlagScale/demo_0913_n2/wds-1
+  data_path: /nfs/hcr/repos/flagscale_dataset/flag-scale/demo_0913_n2/wds-1
   vlm_data: {}
   vla_data: {}
 
