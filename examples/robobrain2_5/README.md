@@ -12,7 +12,7 @@ cd FlagScale/
 
 ### Setup Conda Environment
 
-Create a new conda environment for robotics training:
+Create a new conda environment:
 
 ```sh
 conda create -n flagscale-inference python=3.12
