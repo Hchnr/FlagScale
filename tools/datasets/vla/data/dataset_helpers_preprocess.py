@@ -4,10 +4,10 @@ import logging
 import numpy as np
 import PIL
 import torch
-from megatron.energon import DefaultTaskEncoder
 from qwen_vl_utils import process_vision_info
 from transformers import AutoProcessor
 
+from megatron.energon import DefaultTaskEncoder
 from tools.datasets.vla.data.energon.chatml import ChatMLSample
 
 dataset_logger = logging.getLogger(__name__)

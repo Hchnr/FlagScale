@@ -12,21 +12,21 @@ import pathlib
 import platform
 import random
 import time
-from typing import Tuple
 
 import epath
 import numpy as np
 import torch
 import torch.distributed as dist
-from megatron.energon import WorkerConfig, get_loader, get_train_dataset
 from omegaconf import OmegaConf
 from torch.nn.parallel import DistributedDataParallel as DDP
 from transformers import get_scheduler
 
 import wandb
+from megatron.energon import WorkerConfig, get_loader, get_train_dataset
+from tools.datasets.vla.data.dataset_helpers_preprocess import TaskEncoder
+
 from flagscale.logger import logger
 from flagscale.models.robobrain_x.qwen_groot import Qwen_GR00T
-from tools.datasets.vla.data.dataset_helpers_preprocess import TaskEncoder
 
 # Sane Defaults
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -63,7 +63,7 @@ def build_param_lr_groups(model, cfg):
 
 def setup_optimizer_and_scheduler(
     model, cfg
-) -> Tuple[torch.optim.Optimizer, torch.optim.lr_scheduler._LRScheduler]:
+) -> tuple[torch.optim.Optimizer, torch.optim.lr_scheduler._LRScheduler]:
     """set optimizer and scheduler"""
     # initialize optimizer
     param_groups = build_param_lr_groups(model=model, cfg=cfg)
