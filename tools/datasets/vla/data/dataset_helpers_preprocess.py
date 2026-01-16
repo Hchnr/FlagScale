@@ -87,9 +87,9 @@ class TaskEncoder(DefaultTaskEncoder[ChatMLSample, ChatMLSample, ChatMLSample, C
                     RuntimeWarning(
                         "action token are on in your tokenizer, plz see starVLA/model/modules/vlm/tools/add_qwen_special_tokens/README.md."
                     )
-            labels[labels == self.processor.tokenizer.pad_token_id] = (
-                -100
-            )  ## mask out pad tokens as well
+            labels[
+                labels == self.processor.tokenizer.pad_token_id
+            ] = -100  ## mask out pad tokens as well
             batch_input["labels"] = labels
 
         return batch_input

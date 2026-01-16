@@ -165,7 +165,6 @@ def main(cfg) -> None:
 
     step = 0
     done = False
-    
 
     t_start = time.time()
     while not done:
@@ -184,7 +183,7 @@ def main(cfg) -> None:
 
         if step % cfg.log_freq == 0 and dist.get_rank() == 0 and local_rank == 0:
             logger.info(f"step {step} loss: {action_loss.item()}")
-            logger.info(f"step {step}: {(time.time() - t_start)/cfg.log_freq:.3f}s/iter")
+            logger.info(f"step {step}: {(time.time() - t_start) / cfg.log_freq:.3f}s/iter")
             t_start = time.time()
         step += 1
         if step >= cfg.train_steps:
