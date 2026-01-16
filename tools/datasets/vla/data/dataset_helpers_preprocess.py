@@ -138,12 +138,12 @@ class TaskEncoder(DefaultTaskEncoder[ChatMLSample, ChatMLSample, ChatMLSample, C
                     "action": action.astype(np.float16),
                 }
             )
-        trimed_batch = get_batch(batch=batch)
-        batch_images = [example["image"] for example in trimed_batch]  #  [B，[PLT]]
-        instructions = [example["lang"] for example in trimed_batch]  # [B, str]
-        actions = [example["action"] for example in trimed_batch]  # label [B， len, 7]
+        trimmed_batch = get_batch(batch=batch)
+        batch_images = [example["image"] for example in trimmed_batch]  #  [B，[PLT]]
+        instructions = [example["lang"] for example in trimmed_batch]  # [B, str]
+        actions = [example["action"] for example in trimmed_batch]  # label [B， len, 7]
         state = (
-            [example["state"] for example in trimed_batch] if "state" in trimed_batch[0] else None
+            [example["state"] for example in trimmed_batch] if "state" in trimmed_batch[0] else None
         )  # [B, 1, state_dim]
         actions = np.stack(actions, axis=0)
         state = np.stack(state, axis=0)
