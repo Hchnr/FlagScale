@@ -1,9 +1,9 @@
 # Copyright (c) 2025, BAAI. All rights reserved
-# 
+#
 # Adopted from: https://github.com/starVLA/starVLA/blob/starVLA/starVLA/model/modules/vlm/QWen2_5.py
 # Below is the original copyright:
 #   Copyright 2025 starVLA community. All rights reserved.
-#   Licensed under the MIT License, Version 1.0 (the "License"); 
+#   Licensed under the MIT License, Version 1.0 (the "License");
 #   Implemented by [Jinhui YE / HKUST University] in [2025].
 import json
 import logging
