@@ -27,9 +27,9 @@ _MAX_CPU_COUNT = multiprocessing.cpu_count()
 
 
 def _get_args_megatron(config: DictConfig):
-    assert config.experiment.task.backend == "megatron", (
-        "This function only supports megatron backend."
-    )
+    assert (
+        config.experiment.task.backend == "megatron"
+    ), "This function only supports megatron backend."
 
     # Convert the DictConfig to a regular dictionary
     config_dict = OmegaConf.to_container(config, resolve=True)
@@ -48,9 +48,9 @@ def _get_args_megatron(config: DictConfig):
 
 
 def _get_args_robotics(config: DictConfig):
-    assert config.experiment.task.backend == "robotics", (
-        "This function only supports robotics backend."
-    )
+    assert (
+        config.experiment.task.backend == "robotics"
+    ), "This function only supports robotics backend."
 
     # Convert the DictConfig to a regular dictionary
     config_dict = OmegaConf.to_container(config, resolve=True)
@@ -477,7 +477,13 @@ class SSHTrainRunner(RunnerBase):
             run_local_command(f"bash {host_run_script_file}", dryrun)
 
     def run(
-        self, with_test=False, dryrun=False, monitor=False, interval=10, enable_monitoring=None
+        self,
+        with_test=False,
+        dryrun=False,
+        monitor=False,
+        interval=10,
+        enable_monitoring=None,
+        **kwargs,
     ):
         # Read from config if not explicitly provided
         if enable_monitoring is None:
