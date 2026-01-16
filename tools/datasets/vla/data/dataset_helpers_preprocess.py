@@ -1,3 +1,11 @@
+# Copyright (c) 2025, BAAI. All rights reserved
+# 
+# Adopted from: https://github.com/starVLA/starVLA/blob/starVLA/starVLA/model/modules/vlm/QWen2_5.py
+# Below is the original copyright:
+#   Copyright 2025 starVLA community. All rights reserved.
+#   Licensed under the MIT License, Version 1.0 (the "License"); 
+#   Implemented by [Jinhui YE / HKUST University] in [2025].
+
 import json
 import logging
 
@@ -69,7 +77,7 @@ class TaskEncoder(DefaultTaskEncoder[ChatMLSample, ChatMLSample, ChatMLSample, C
         # if solutions, mask out the solution tokens in labels
         if solutions is not None:
             action_token_min = _ACTION_TOKEN_MIN  # how can we know this range? --> we has other way for this, but is slower see qwenhelix branch
-            action_token_max = _ACTION_TOKEN_MAX  # here only for fast_tokenizer, see starVLA/model/modules/vlm/tools/add_qwen_special_tokens/README.md
+            action_token_max = _ACTION_TOKEN_MAX  # here only for fast_tokenizer
             labels = batch_input["input_ids"].clone()
             # For each sequence in the batch, find the first occurrence of an action token.
             for i in range(labels.size(0)):
@@ -84,9 +92,7 @@ class TaskEncoder(DefaultTaskEncoder[ChatMLSample, ChatMLSample, ChatMLSample, C
                 else:
                     # If no action token is found, mask the entire sequence.
                     seq[:] = IGNORE_INDEX
-                    RuntimeWarning(
-                        "action token are on in your tokenizer, plz see starVLA/model/modules/vlm/tools/add_qwen_special_tokens/README.md."
-                    )
+                    RuntimeWarning("action token are on in your tokenizer,")
             labels[
                 labels == self.processor.tokenizer.pad_token_id
             ] = -100  ## mask out pad tokens as well
