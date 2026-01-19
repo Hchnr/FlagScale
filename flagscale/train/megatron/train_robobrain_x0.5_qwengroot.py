@@ -200,11 +200,11 @@ def main(cfg) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--config-path",
+        "--config-file",
         type=str,
-        default="examples/robotics/conf/train/libero_qwengroot.yaml",
+        default="outputs/libero_qwengroot/hydra/.hydra/config.yaml",
         help="Path to YAML config",
     )
     args, clipargs = parser.parse_known_args()
-    cfg = OmegaConf.load(args.config_path)
-    main(cfg)
+    cfg = OmegaConf.load(args.config_file)
+    main(cfg.train)
