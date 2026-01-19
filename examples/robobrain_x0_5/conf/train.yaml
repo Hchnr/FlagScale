@@ -22,7 +22,7 @@ experiment:
     before_start: echo "Starting RoboBrain-x0.5 Training"
   envs:
     LOGLEVEL: "INFO"
-    CUDA_VISIBLE_DEVICES: 2,3
+    CUDA_VISIBLE_DEVICES: 0,1
     CUDA_DEVICE_MAX_CONNECTIONS: 1
     WANDB_MODE: offline
 

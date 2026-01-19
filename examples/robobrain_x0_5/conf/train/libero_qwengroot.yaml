@@ -21,7 +21,7 @@ framework:
   name: QwenGR00T
   qwenvl:
     # change `base_vlm` to your local path
-    base_vlm: Qwen/Qwen2.5-VL-3B-Instruct
+    base_vlm: /nfs/hcr/models/Qwen/Qwen2.5-VL-3B-Instruct
     # attn_implementation: flash_attention_2
     attn_implementation: eager
     vl_hidden_dim: 2048
@@ -63,7 +63,7 @@ datasets:
     action_horizon: 7
     action_key: eepose
   # change `data_path` to your actual data path
-  data_path: ./demo_0913_n2/wds-2
+  data_path: /nfs/hcr/repos/flagscale_dataset/flag-scale/demo_0913_n2/wds-1-single
   vlm_data: {}
   vla_data: {}
 
