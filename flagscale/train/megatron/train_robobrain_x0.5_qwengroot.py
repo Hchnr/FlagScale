@@ -170,7 +170,9 @@ def main(cfg) -> None:
     while not done:
         batch = next(data_iter)
 
-        qwen_inputs, state, actions = batch["qwen_inputs"], batch["state"], batch["actions"]
+        qwen_inputs, state, actions = batch.get("qwen_inputs"), batch.get("state"), batch.get("actions")
+        if not qwen_inputs or not actions:
+            continue
         for i in qwen_inputs:
             qwen_inputs[i] = qwen_inputs[i].to(device=vla.device)
         output_dict = vla.forward(qwen_inputs=qwen_inputs, state=state, actions=actions)

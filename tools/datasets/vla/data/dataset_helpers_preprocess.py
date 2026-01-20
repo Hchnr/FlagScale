@@ -30,7 +30,9 @@ class TaskEncoder(DefaultTaskEncoder[ChatMLSample, ChatMLSample, ChatMLSample, C
         self.config = config
         self.vision_root = config.datasets.task_encoder.vision_root
 
-        model_id = config.get("tokenizer_model_id", "Qwen/Qwen2.5-VL-3B-Instruct")
+        model_id = config.get("tokenizer_model_id")
+        if model_id is None:
+            raise ValueError("tokenizer_model_id must be specified in the config.")
         processor = AutoProcessor.from_pretrained(model_id)
         processor.tokenizer.padding_side = "left"
         self.processor = processor
