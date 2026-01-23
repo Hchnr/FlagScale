@@ -1,0 +1,188 @@
+# TorchTitan 训练配置示例
+# 用于 Qwen-GR00T 模型的不同并行度配置
+
+# ============================================================
+# 示例 1: 纯数据并行 (4DP)
+# 适用: 单机 4 卡，无显存压力
+# ============================================================
+# parallelism:
+#   data_parallel_degree: 4
+#   tensor_parallel_degree: 1
+#   pipeline_parallel_degree: 1
+#
+# batch_size: 4
+# trainer:
+#   learning_rate:
+#     base: 3.0e-5
+
+# ============================================================
+# 示例 2: 混合数据+张量并行 (2DP × 2TP)
+# 适用: 单机 4 卡，需要显存优化
+# ============================================================
+
+seed: 42
+trackers: [jsonl, wandb]
+wandb_entity: flagscale
+wandb_project: robobrain_torchtitan
+is_debug: false
+
+batch_size: 2
+resume: false
+checkpoint_dir: outputs/libero_qwengroot_torchtitan/checkpoints
+exp_name: qwengroot_2dp_2tp
+project_name: robobrain_x0.5
+wandb_enabled: false
+output_directory: outputs/libero_qwengroot_torchtitan/checkpoints
+log_freq: 10
+train_steps: 36000
+save_steps: 3600
+
+shuffle_buffer_size: null
+shuffle_over_epochs_multiplier: -1
+
+framework:
+  name: QwenGR00T
+  qwenvl:
+    base_vlm: /nfs/hcr/models/Qwen/Qwen2.5-VL-3B-Instruct
+    attn_implementation: eager
+    vl_hidden_dim: 2048
+  dino:
+    dino_backbone: dinov2_vits14
+  action_model:
+    action_model_type: DiT-L
+    action_hidden_dim: 1024
+    hidden_size: 1024
+    add_pos_embed: true
+    max_seq_len: 1024
+    action_dim: 14
+    state_dim: 7
+    future_action_window_size: 29
+    action_horizon: 30
+    past_action_window_size: 0
+    repeated_diffusion_steps: 8
+    noise_beta_alpha: 1.5
+    noise_beta_beta: 1.0
+    noise_s: 0.999
+    num_timestep_buckets: 1000
+    num_inference_timesteps: 4
+    num_target_vision_tokens: 32
+    diffusion_model_cfg:
+      cross_attention_dim: 2048
+      dropout: 0.2
+      final_dropout: true
+      interleave_self_attention: true
+      norm_type: ada_norm
+      num_layers: 16
+      output_dim: 1024
+      positional_embeddings: null
+  reduce_in_full_precision: true
+
+datasets:
+  task_encoder:
+    vision_root: ""
+    state_key: eepose
+    action_horizon: 7
+    action_key: eepose
+  data_path: /nfs/hcr/repos/flagscale_dataset/flag-scale/demo_0913_n2/wds-1-single
+  vlm_data: {}
+  vla_data: {}
+
+# TorchTitan 并行配置
+trainer:
+  # 并行度设置 (示例 2: 2DP × 2TP)
+  parallelism:
+    data_parallel_degree: 2        # 2 卡数据并行
+    tensor_parallel_degree: 2      # 2 卡张量并行
+    pipeline_parallel_degree: 1    # 暂不使用管道并行
+
+  # 内存优化
+  activation_checkpointing: true
+  max_grad_norm: 1.0
+  enable_gradient_checkpointing: true
+
+  # FSDP 配置
+  sharding_strategy: "FULL_SHARD"
+  cpu_offload: false
+
+  # 分层学习率
+  learning_rate:
+    base: 3.0e-05
+    qwen_vl_interface: 1.0e-05
+    action_model: 1.0e-04
+
+  # 优化器
+  optimizer:
+    name: AdamW
+    betas: [0.9, 0.95]
+    weight_decay: 1.0e-08
+    eps: 1.0e-08
+
+  # 学习率调度
+  lr_scheduler_type: cosine_with_min_lr
+  num_warmup_steps: 3600
+  max_train_steps: 36000
+  scheduler_specific_kwargs:
+    min_lr: 1.0e-06
+
+  # 数据加载
+  num_workers: 4
+  prefetch_factor: 2
+
+  # 混合精度
+  enable_mixed_precision_training: true
+
+system: {}
+model: {}
+data: {}
+
+---
+
+# ============================================================
+# 示例 3: 深度张量并行 (1DP × 4TP)
+# 适用: 单机 4 卡，超大模型
+# ============================================================
+# parallelism:
+#   data_parallel_degree: 1
+#   tensor_parallel_degree: 4
+#   pipeline_parallel_degree: 1
+#
+# batch_size: 1
+# trainer:
+#   learning_rate:
+#     base: 1.5e-5  # 较小的学习率用于超大模型
+
+---
+
+# ============================================================
+# 示例 4: 多卡 (8DP)
+# 适用: 多机 8 卡（2 节点，每节点 4 卡）
+# ============================================================
+# parallelism:
+#   data_parallel_degree: 8
+#   tensor_parallel_degree: 1
+#   pipeline_parallel_degree: 1
+#
+# batch_size: 2
+# 
+# 运行命令:
+# torchrun --nproc_per_node=4 --nnodes=2 \
+#   flagscale/train/torchtitan/train_robobrain_x0.5_qwengroot.py \
+#   --config-file config.yaml
+
+---
+
+# ============================================================
+# 示例 5: 三维并行 (2DP × 2TP × 2PP)
+# 适用: 多机多卡，最大化吞吐量
+# ============================================================
+# parallelism:
+#   data_parallel_degree: 2
+#   tensor_parallel_degree: 2
+#   pipeline_parallel_degree: 2  # 需要 8 卡
+#
+# batch_size: 1
+# 
+# 运行命令:
+# torchrun --nproc_per_node=4 --nnodes=2 \
+#   flagscale/train/torchtitan/train_robobrain_x0.5_qwengroot.py \
+#   --config-file config.yaml
