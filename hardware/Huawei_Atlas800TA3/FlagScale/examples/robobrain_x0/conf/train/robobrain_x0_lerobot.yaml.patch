@@ -1,52 +1,56 @@
-diff --git a/examples/robobrain_x0/conf/train/robobrain_x0.yaml b/examples/robobrain_x0/conf/train/robobrain_x0.yaml
+diff --git a/examples/robobrain_x0/conf/train/robobrain_x0_lerobot.yaml b/examples/robobrain_x0/conf/train/robobrain_x0_lerobot.yaml
 new file mode 100644
-index 00000000..958c757e
+index 00000000..bff8cdcb
 --- /dev/null
-+++ b/examples/robobrain_x0/conf/train/robobrain_x0.yaml
-@@ -0,0 +1,116 @@
++++ b/examples/robobrain_x0/conf/train/robobrain_x0_lerobot.yaml
+@@ -0,0 +1,132 @@
++# RoboBrain-X0 training configuration with LeRobotDataset format
++# This configuration uses the LeRobot dataset format instead of WebDataset/Energon
++# Reference: https://github.com/huggingface/lerobot
++
 +system:
 +  vision_recompute_layer_steps: 16
 +  vision_ration: 0.1
-+  num_workers: 1
++  num_workers: 4
 +  calculate_per_token_loss: true
 +  tensor_model_parallel_size: 1
 +  pipeline_model_parallel_size: 4
 +  context_parallel_size: 1
 +  disable_bias_linear: True
 +  use_flash_attn: True
-+  use_distributed_optimizer: False
-+  sequence_parallel: False
++  use_distributed_optimizer: True
++  sequence_parallel: True
 +  tp_comm_overlap: False
-+  overlap_grad_reduce: False # if has text-only must be false
-+  overlap_param_gather: False # if has text-only must be false
++  overlap_grad_reduce: False
++  overlap_param_gather: False
 +  use_mcore_models: True
 +  transformer_impl: local
 +  # recompute_method: "uniform"
 +  # recompute_granularity: "full"
 +  # recompute_num_layers: 18
-+  # use_te: True
++  # use_te: False
 +  precision:
 +    bf16: True
 +    attention_softmax_in_fp32: True
 +  logging:
-+    timing_log_level: 1
-+    log_interval: 10
-+    tensorboard_log_interval: 10
++    timing_log_level: 2
++    log_interval: 1
++    tensorboard_log_interval: 1
 +    log_throughput: True
 +    wandb_project: ${experiment.exp_name}
 +    wandb_exp_name: ${experiment.exp_name}
 +    log_params_norm: True
 +    log_num_zeros_in_grad: True
 +  checkpoint:
-+    save_interval: 33
-+    # pretrained_checkpoint: checkpoint after converting
++    save_interval: 100
 +    dataloader_save: ${experiment.exp_dir}/checkpoints/dataloader
 +    use_dist_ckpt: False
 +    ckpt_format: torch
 +    async_save: False
++    # pretrained_checkpoint: /models/BAAI/RoboBrain-X0-Preview-tp1
 +
 +model:
-+  # attention_backend: flash # don't use "auto(nvte_flash_attn)"
++  attention_backend: flash
 +  disable_bias_linear: True
 +  add_qkv_bias: True
 +  num_layers: 36
@@ -54,11 +58,10 @@ index 00000000..958c757e
 +  ffn_hidden_size: 11008
 +  num_attention_heads: 16
 +  num_query_groups: 2
-+  seq_length: 16384 # 16384 15360
-+  max_padding_length: 16384 # real seq_length
-+  # especial for qwen2.5-vl
++  seq_length: 16384
++  max_padding_length: 16384
 +  enable_variable_seq_lengths: True
-+  max_position_embeddings: 128000 # only useful for additional position embedding
++  max_position_embeddings: 128000
 +  swiglu: True
 +  normalization: RMSNorm
 +  norm_epsilon: 1e-6
@@ -66,19 +69,16 @@ index 00000000..958c757e
 +  attention_dropout: 0.0
 +  hidden_dropout: 0.0
 +  clip_grad: 1.0
-+  #######################
-+  train_iters: 2
-+  # formal train_iters:
-+  # train_iters: 262478 # 1 epoch
-+  eval_iters: 0 # no valid
++  # 1000
++  train_iters: 30
++  eval_iters: 0
 +  micro_batch_size: 1
 +  global_batch_size: 1
 +  allow_missing_vision_projection_checkpoint: False
 +  apply_layernorm_1p: False
 +  group_query_attention: True
 +  no_masked_softmax_fusion: True
-+  # untie_embeddings_and_output_weights: False
-+  untie_embeddings_and_output_weights: True
++  untie_embeddings_and_output_weights: False
 +
 +  # position embedding
 +  position_embedding_type: mrope
@@ -102,22 +102,39 @@ index 00000000..958c757e
 +    lr_scheduler:
 +      lr: 5.0e-5
 +      min_lr: 0
-+      lr_warmup_iters: 0
++      lr_warmup_iters: 10
 +      lr_decay_style: cosine
 +
 +data:
-+  # data_path: /root/FlagScale/demo_0913_n2/wds-1
++  # LeRobotDataset configuration
++  # data_path should point to the root directory of your LeRobot dataset
++  # The directory should contain:
++  #   - meta/info.json
++  #   - meta/stats.json
++  #   - meta/tasks.parquet
++  #   - data/chunk-XXX/file-XXX.parquet
++  #   - videos/... (if using video data)
++
 +  data_path: /data/hcr/repos/lerobot/aloha_mobile_cabinet
-+  # formal dataset:
-+  # data_path: /share/project/dumengfei/data/libero_data_0910_F1A1C10/wds-1
-+  vision_root: /
++
++  # Dataset type: use 'lerobot' for LeRobotDataset format
++  dataset_type: lerobot
++
++  # Video backend for decoding video frames
++  # Options: pyav (default), torchcodec, video_reader
++  video_backend: pyav
++
++  # Number of bins for action discretization (default: 2048)
++  action_discretization_bins: 2048
++
 +  dataloader_type: external
 +  split: 100,0,0
-+  shuffle-buffer-size: 1000
++
 +  tokenizer:
 +    tokenizer_type: Qwen2VLTokenizer
 +    tokenizer_path: /data/hcr/models/BAAI/RoboBrain-X0-Preview
-+    vocab_size: 151643 # action
++    vocab_size: 151643
 +    make_vocab_size_divisible_by: 64
 +    extra_vocab_size: 293
+\ No newline at end of file
 
