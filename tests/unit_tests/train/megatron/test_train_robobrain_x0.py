@@ -512,9 +512,7 @@ class TestLeRobotDatasetWrapper:
 
     def test_getitem_returns_expected_keys(self, wrapper):
         """Test __getitem__ returns dict with expected keys."""
-        with patch.object(
-            wrapper.tokenizer, "processor", create=True
-        ) as mock_processor:
+        with patch.object(wrapper.tokenizer, "processor", create=True) as mock_processor:
             mock_processor.image_processor.return_value = {
                 "pixel_values": np.random.randn(4, 3 * 2 * 14 * 14).astype(np.float32),
                 "image_grid_thw": torch.tensor([[1, 2, 2]]),
@@ -549,13 +547,9 @@ class TestLeRobotDatasetWrapper:
             return_value=mock_tokenizer,
         ):
             wrapper = LeRobotDatasetWrapper(dataset, mock_args)
-            with patch.object(
-                wrapper.tokenizer, "processor", create=True
-            ) as mock_processor:
+            with patch.object(wrapper.tokenizer, "processor", create=True) as mock_processor:
                 mock_processor.image_processor.return_value = {
-                    "pixel_values": np.random.randn(4, 3 * 2 * 14 * 14).astype(
-                        np.float32
-                    ),
+                    "pixel_values": np.random.randn(4, 3 * 2 * 14 * 14).astype(np.float32),
                     "image_grid_thw": torch.tensor([[1, 2, 2]]),
                 }
                 result = wrapper[0]
